@@ -12,12 +12,14 @@ export default function WelcomeScreen() {
 
   return (
     <ImageBackground
+    // Sets the background image for the screen
       source={{ uri: 'https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1350&q=80' }}
       style={styles.background}
       resizeMode="cover"
     >
       <View style={styles.overlay}>
         <Image
+        // App Logo Display
           source={require('../assets/logo.png')}
           style={styles.logo}
         />
@@ -25,10 +27,12 @@ export default function WelcomeScreen() {
         <Text style={styles.subtitle}>An exclusive dining experience</Text>
 
         <TouchableOpacity style={styles.primaryBtn} onPress={() => nav.navigate('Login')}>
+          {/* Button to navigate to the Chef login screen */}
           <Text style={styles.primaryText}>Login as Chef</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.secondaryBtn} onPress={() => nav.navigate('MenuDisplay')}>
+          {/* Button to navigate directly to the guest menu view */}
           <Text style={styles.secondaryText}>Continue as Guest</Text>
         </TouchableOpacity>
       </View>

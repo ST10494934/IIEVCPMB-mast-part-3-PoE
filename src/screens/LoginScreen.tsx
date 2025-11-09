@@ -9,9 +9,11 @@ type Nav = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 export default function LoginScreen() {
   const navigation = useNavigation<Nav>();
+  // State to manage the user's input for username and password
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  // Function to handle login attempt and basic validation
   const onLogin = () => {
     if (username === 'chef' && password === '1234') {
       navigation.navigate('Chef');

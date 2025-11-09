@@ -23,6 +23,7 @@ export default function ChefScreen() {
           style={styles.menuBtn}
           onPress={() => navigation.navigate('AddDish')}
         >
+          {/* Button to navigate to the screen for adding a new menu item */}
           <Text style={styles.menuText}>Add Menu Item</Text>
         </TouchableOpacity>
 
@@ -30,10 +31,12 @@ export default function ChefScreen() {
           style={styles.menuBtn}
           onPress={() => navigation.navigate('MenuDisplay')}
         >
+          {/* Button to navigate to view the full menu */}
           <Text style={styles.menuText}>View Menu</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.navigate('Welcome')}>
+          {/* Button to log out / return to the Welcome screen */}
           <Text style={styles.backText}>← Back to Home</Text>
         </TouchableOpacity>
       </View>

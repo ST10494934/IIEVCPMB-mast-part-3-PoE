@@ -15,6 +15,7 @@ export default function AppHeader({ title, showBack = false }: AppHeaderProps) {
 
   return (
     <View style={styles.header}>
+      {/* Conditional rendering of the back button */}
       {showBack && (
         <TouchableOpacity style={styles.backBtn} onPress={() => nav.navigate('Welcome')}>
           <Text style={styles.backTxt}>← Back to Home</Text>
