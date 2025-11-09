@@ -12,13 +12,19 @@ export default function LoginScreen() {
   // State to manage the user's input for username and password
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  // State to manage the error message visibility
+  const [error, setError] = useState(''); 
 
   // Function to handle login attempt and basic validation
   const onLogin = () => {
+    // Clear any previous error message
+    setError('');
+
     if (username === 'chef' && password === '1234') {
       navigation.navigate('Chef');
     } else {
-      Alert.alert('Access Denied', 'Invalid username or password.');
+      // Set the error message to be displayed in the UI
+      setError('Invalid username or password. Please try again.');
     }
   };
 
@@ -47,6 +53,9 @@ export default function LoginScreen() {
           secureTextEntry
         />
 
+        {/* Conditionally display the error message */}
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
         <TouchableOpacity style={styles.loginBtn} onPress={onLogin}>
           <Text style={styles.loginText}>Login</Text>
         </TouchableOpacity>
@@ -70,6 +79,13 @@ const styles = StyleSheet.create({
   },
   title: { color: '#FFD700', fontSize: 36, fontWeight: '700', marginBottom: 40, textAlign: 'center' },
   input: { width: '100%', backgroundColor: '#fff', padding: 14, borderRadius: 12, marginBottom: 16, color: '#333', fontWeight: '600' },
+  // Style for the error message
+  errorText: {
+    color: '#FF6347', // red color for errors 
+    fontWeight: '600',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
   loginBtn: { width: '100%', backgroundColor: '#FFD700', padding: 16, borderRadius: 12, alignItems: 'center', marginBottom: 20 },
   loginText: { color: '#3C2F2F', fontWeight: '700', fontSize: 18 },
   backBtn: { marginTop: 10 },
