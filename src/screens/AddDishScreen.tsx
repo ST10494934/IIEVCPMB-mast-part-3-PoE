@@ -1,6 +1,6 @@
 // src/screens/AddDishScreen.tsx
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList, MenuItem } from '../types';
@@ -9,9 +9,41 @@ import { v4 as uuidv4 } from 'uuid';
 
 type Nav = NativeStackNavigationProp<RootStackParamList, 'AddDish'>;
 
+interface MenuItemCardProps {
+  item: MenuItem;
+  onRemove: (id: string) => void;
+}
+
+const MenuItemCard = ({ item, onRemove }: MenuItemCardProps) => (
+  <View style={styles.menuItemCard}>
+    <View style={styles.itemInfo}>
+      <Text style={styles.itemName}>{item.name}</Text>
+      <Text style={styles.itemPrice}>R{item.price}</Text>
+    </View>
+    <Text style={styles.itemDesc} numberOfLines={1}>{item.description}</Text>
+    {/* The Remove Button with confirmation logic */}
+    <TouchableOpacity 
+      style={styles.removeBtn} 
+      onPress={() => 
+        Alert.alert(
+          "Confirm Removal",
+          `Are you sure you want to remove ${item.name}?`,
+          [
+            { text: "Cancel", style: "cancel" },
+            { text: "Remove", style: "destructive", onPress: () => onRemove(item.id) },
+          ]
+        )
+      }
+    >
+      <Text style={styles.removeText}>Remove Dish</Text>
+    </TouchableOpacity>
+  </View>
+);
+
+
 export default function AddDishScreen() {
   const navigation = useNavigation<Nav>();
-  const { addItem } = useMenu();
+  const { menu, addItem, removeItem } = useMenu();
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -82,6 +114,18 @@ export default function AddDishScreen() {
       <TouchableOpacity style={styles.addBtn} onPress={onAddDish}>
         <Text style={styles.addText}>Add Dish</Text>
       </TouchableOpacity>
+      
+      <View style={styles.currentMenuContainer}>
+          <Text style={styles.currentMenuTitle}>Current Menu ({menu.length} items)</Text>
+          {menu.length === 0 ? (
+              <Text style={styles.emptyMenuText}>No items added yet.</Text>
+          ) : (
+              // Display current menu items with a remove button
+              menu.map(item => (
+                  <MenuItemCard key={item.id} item={item} onRemove={removeItem} />
+              ))
+          )}
+      </View>
 
       {/* New Button to View Menu */}
       <TouchableOpacity style={styles.viewMenuBtn} onPress={() => navigation.navigate('MenuDisplay')}>
@@ -100,7 +144,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: '#121212',
     padding: 24,
-    justifyContent: 'center',
   },
   title: {
     color: '#FFD700',
@@ -179,5 +222,67 @@ const styles = StyleSheet.create({
     color: '#fff',
     textDecorationLine: 'underline',
     fontSize: 16,
+  },
+  // New styles for displaying current menu items
+  currentMenuContainer: {
+    marginTop: 30,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#333',
+    marginBottom: 20,
+  },
+  currentMenuTitle: {
+    color: '#F5E6CC',
+    fontSize: 22,
+    fontWeight: '700',
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  emptyMenuText: {
+    color: '#ccc',
+    textAlign: 'center',
+    fontStyle: 'italic',
+  },
+  menuItemCard: {
+    backgroundColor: '#252525',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 10,
+    borderLeftWidth: 4,
+    borderLeftColor: '#FFD700',
+  },
+  itemInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 5,
+  },
+  itemName: {
+    color: '#FFD700',
+    fontSize: 18,
+    fontWeight: '700',
+    flexShrink: 1,
+    marginRight: 10,
+  },
+  itemPrice: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  itemDesc: {
+    color: '#ccc',
+    fontSize: 14,
+    marginBottom: 10,
+  },
+  removeBtn: {
+    backgroundColor: '#C81D11', // Red for removal
+    padding: 8,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 5,
+  },
+  removeText: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 14,
   },
 });
