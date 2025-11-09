@@ -32,6 +32,21 @@ export default function MenuDisplayScreen() {
     return menu.filter(item => cat === 'All' || item.category === cat);
   };
   
+  // Function to calculate the average price for a given category
+  const getAveragePrice = (cat: 'Starter' | 'Main' | 'Dessert'): string => {
+    const items = getItemsByCategory(cat);
+    if (items.length === 0) return '0.00';
+    
+    const totalPrice = items.reduce((sum, item) => {
+      // Convert price string to number, defaulting to 0 if invalid
+      const price = parseFloat(item.price) || 0; 
+      return sum + price;
+    }, 0);
+    
+    const average = totalPrice / items.length;
+    // Return the average formatted to two decimal places
+    return average.toFixed(2);
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -71,7 +86,15 @@ export default function MenuDisplayScreen() {
         
         return (
           <View key={cat} style={styles.categorySection}>
-            <Text style={styles.categoryTitle}>{cat}s</Text>
+            {/* Wrap Title and Average Price in a new view for layout */}
+            <View style={styles.titleContainer}>
+              <Text style={styles.categoryTitle}>{cat}s</Text>
+              {/* Display Average Price */}
+              <Text style={styles.averagePriceText}>
+                Avg: R{getAveragePrice(cat)}
+              </Text>
+            </View>
+            
             {items.map(item => (
               <View key={item.id} style={styles.itemCard}>
                 <Text style={styles.itemName}>{item.name}</Text>
@@ -139,6 +162,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
     marginTop: 40,
+    fontStyle: 'italic',
+  },
+    
+  // New styles for Average Price Display
+  titleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    marginBottom: 12,
+  },
+  averagePriceText: {
+    color: '#F5E6CC',
+    fontSize: 18,
+    fontWeight: '600',
     fontStyle: 'italic',
   },
 });
