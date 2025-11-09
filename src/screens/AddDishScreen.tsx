@@ -1,4 +1,3 @@
-// src/screens/AddDishScreen.tsx
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -57,6 +56,12 @@ export default function AddDishScreen() {
     setPrice('');
     setCategory('Starter');
   };
+    
+  // Define categories and grouping function for the removal section
+  const menuCategories: ('Starter' | 'Main' | 'Dessert')[] = ['Starter', 'Main', 'Dessert'];
+    
+  const getItemsByCategory = (cat: 'Starter' | 'Main' | 'Dessert') =>
+    menu.filter(item => item.category === cat);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -104,14 +109,26 @@ export default function AddDishScreen() {
       
       {/*Section to display and remove items */}
       <View style={styles.currentMenuContainer}>
-          <Text style={styles.currentMenuTitle}>Current Menu ({menu.length} items)</Text>
-          {menu.length === 0 ? (
-              <Text style={styles.emptyMenuText}>No items added yet.</Text>
-          ) : (
-              menu.map(item => (
+        <Text style={styles.currentMenuTitle}>Current Menu ({menu.length} items)</Text>
+        {menu.length === 0 ? (
+          <Text style={styles.emptyMenuText}>No items added yet.</Text>
+        ) : (
+          // Display items grouped by category 
+          menuCategories.map(cat => {
+            const items = getItemsByCategory(cat);
+            
+            if (items.length === 0) return null; // Don't show category if empty
+            
+            return (
+              <View key={cat} style={styles.categoryGrouping}> 
+                <Text style={styles.categoryRemoveTitle}>{cat}s ({items.length})</Text>
+                {items.map(item => (
                   <MenuItemCard key={item.id} item={item} onRemove={removeItem} />
-              ))
-          )}
+                ))}
+              </View>
+            );
+          })
+        )}
       </View>
 
       {/* Navigation Buttons */}
@@ -272,5 +289,20 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '700',
     fontSize: 14,
+  },
+  categoryGrouping: {
+    marginBottom: 20,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#333',
+  },
+  categoryRemoveTitle: {
+    color: '#FFD700',
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#FFD700',
+    paddingBottom: 5,
   },
 });
