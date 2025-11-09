@@ -21,29 +21,15 @@ const MenuItemCard = ({ item, onRemove }: MenuItemCardProps) => (
       <Text style={styles.itemPrice}>R{item.price}</Text>
     </View>
     <Text style={styles.itemDesc} numberOfLines={1}>{item.description}</Text>
-    {/* The Remove Button with confirmation logic */}
-    <TouchableOpacity 
-      style={styles.removeBtn} 
-      onPress={() => 
-        Alert.alert(
-          "Confirm Removal",
-          `Are you sure you want to remove ${item.name}?`,
-          [
-            { text: "Cancel", style: "cancel" },
-            { text: "Remove", style: "destructive", onPress: () => onRemove(item.id) },
-          ]
-        )
-      }
-    >
+    <TouchableOpacity style={styles.removeBtn} onPress={() => onRemove(item.id)}>
       <Text style={styles.removeText}>Remove Dish</Text>
     </TouchableOpacity>
   </View>
 );
 
-
 export default function AddDishScreen() {
   const navigation = useNavigation<Nav>();
-  const { menu, addItem, removeItem } = useMenu();
+  const { menu, addItem, removeItem } = useMenu(); 
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -76,6 +62,7 @@ export default function AddDishScreen() {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Add Menu Item</Text>
 
+      {/* Input Fields for Adding Dish */}
       <TextInput
         placeholder="Dish Name"
         style={styles.input}
@@ -115,19 +102,19 @@ export default function AddDishScreen() {
         <Text style={styles.addText}>Add Dish</Text>
       </TouchableOpacity>
       
+      {/*Section to display and remove items */}
       <View style={styles.currentMenuContainer}>
           <Text style={styles.currentMenuTitle}>Current Menu ({menu.length} items)</Text>
           {menu.length === 0 ? (
               <Text style={styles.emptyMenuText}>No items added yet.</Text>
           ) : (
-              // Display current menu items with a remove button
               menu.map(item => (
                   <MenuItemCard key={item.id} item={item} onRemove={removeItem} />
               ))
           )}
       </View>
 
-      {/* New Button to View Menu */}
+      {/* Navigation Buttons */}
       <TouchableOpacity style={styles.viewMenuBtn} onPress={() => navigation.navigate('MenuDisplay')}>
         <Text style={styles.viewMenuText}>View Menu</Text>
       </TouchableOpacity>
@@ -145,6 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#121212',
     padding: 24,
   },
+
   title: {
     color: '#FFD700',
     fontSize: 32,
@@ -223,7 +211,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     fontSize: 16,
   },
-  // New styles for displaying current menu items
+  //New styles for displaying current menu items
   currentMenuContainer: {
     marginTop: 30,
     paddingTop: 10,
