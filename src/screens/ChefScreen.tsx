@@ -24,7 +24,7 @@ export default function ChefScreen() {
           onPress={() => navigation.navigate('AddDish')}
         >
           {/* Button to navigate to the screen for adding a new menu item */}
-          <Text style={styles.menuText}>Add Menu Item</Text>
+          <Text style={styles.menuText}>Add/Remove Menu Item</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
