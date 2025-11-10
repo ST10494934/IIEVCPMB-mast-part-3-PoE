@@ -7,6 +7,7 @@
 - Implemented a **"Remove Dish" button** to remove dishes from the Menu Display Screen.
 - Menu items displayed for removal on the Chef's **Add Dish** screen are now **grouped and sorted by Category (Starter, Main, Dessert)** for improved clarity.
 - Implemented functionality to **load and persist the entire menu list** using AsyncStorage.
+- Fixed the problem where the **Remove Dish** button occasionally did not respond because of overlapping touch interactions with the confirmation alerts.
 
 ---
 
